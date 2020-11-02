@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="static/jquery-2.1.1.js"></script>
+</head>
+<body>
+<form >
+    用户名：<input type="text" id="userName">
+    密码：<input type="text" id="pwd">
+    <button id="btn" onclick="login()">登录</button>
+</form>
+</body>
+<script>
+    function login() {
+        var name = $("#userName").val();
+        var pwd = $("#pwd").val();
+        $.ajax({
+            url : "/user/login",
+            method : "get",
+            dataType:  "json",
+            data:{
+                userName: name,
+                pwd: pwd
+            },
+            success:function (data) {
+
+            }
+
+
+        })
+    }
+</script>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="static/jquery-2.1.1.js"></script>
+    <script src="static/aes.js"></script>
+</head>
+<body>
+<form action="" >
+    <input type="text" id="loginName">
+    <input type="text" id="loginPwd">
+    <button id="btn" onclick="login()">登录</button>
+</form>
+
+<script type="text/javascript">
+    /**
+     * 加密（需要先加载lib/aes/aes.min.js文件）
+     * @param word
+     * @returns {*}
+     */
+
+    var data="";
+
+    function login() {
+       var loginName = $('#loginName').val();
+       var loginPwd = $('#loginPwd').val();
+        data = {
+           name: loginName,
+            pwd: loginPwd
+        }
+
+        $.ajax({
+            url:'/user/login',
+            method: 'post',
+            dataType: 'json',
+            data:{
+                loginName:encrypt(loginName),
+                loginPwd:encrypt(loginPwd)
+            },
+            success:function (data) {
+                console.log(data)
+            }
+
+        })
+    }
+
+    /**
+     *加密
+     */
+    function encrypt(word){
+        var key = CryptoJS.enc.Utf8.parse("abcdefgabcdefg12");
+        var srcs = CryptoJS.enc.Utf8.parse(word);
+        var encrypted = CryptoJS.AES.encrypt(srcs, key,
+            {mode:CryptoJS.mode.ECB,padding: CryptoJS.pad.Pkcs7});
+        return encrypted.toString();
+    }
+
+    /**
+     * 解密
+     * @param word
+     * @returns {*}
+     */
+    function decrypt(word){
+        var key = CryptoJS.enc.Utf8.parse("abcdefgabcdefg12");
+        var decrypt = CryptoJS.AES.decrypt(word, key, {mode:CryptoJS.mode.ECB,padding: CryptoJS.pad.Pkcs7});
+        return CryptoJS.enc.Utf8.stringify(decrypt).toString();
+    }
+</script>
+</body>
+</html>
